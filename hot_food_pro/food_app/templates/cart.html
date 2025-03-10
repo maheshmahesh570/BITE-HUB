@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Cart</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in cart_items %}
+        <tr>
+            <td>{{ item.product.name }}</td>
+            <td><input type="number" value="{{ item.quantity }}" min="1" max="10" onchange="updateQuantity({{ item.id }}, this.value)"></td>
+            <td>₹{{ item.product.price }}</td>
+            <td>₹{{ item.total_price }}</td>
+            <td><a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger">Remove</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<p>Total: ₹{{ total }}</p>
+<a href="{% url 'checkout' %}" class="btn btn-primary">Checkout</a>
+<script>
+    function updateQuantity(itemId, quantity) {
+        fetch(`{% url 'update_cart' 0 %}`.replace('0', itemId), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ quantity })
+        });
+    }
+</script>
+{% endblock %}

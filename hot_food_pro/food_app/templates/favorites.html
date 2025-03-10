@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="mb-4">Your Favorites</h2>
+            {% if favorites %}
+                <div class="row">
+                    {% for favorite in favorites %}
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <img src="{{ favorite.product.image.url }}" class="card-img-top" alt="{{ favorite.product.name }}" style="height: 200px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ favorite.product.name }}</h5>
+                                    <p class="card-text">{{ favorite.product.description|truncatewords:10 }}</p>
+                                    <p class="card-text"><strong>Price:</strong> ₹{{ favorite.product.price }}</p>
+                                    <a href="{% url 'remove_from_favorites' favorite.product.id %}" class="btn btn-danger btn-sm">Remove</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-heart-broken"></i> Your favorites list is empty. Start adding some delicious food!
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Back to Home Button -->
+    <div class="text-center mt-4">
+        <a href="{% url 'home' %}" class="btn btn-primary">Back to Home</a>
+    </div>
+</div>
+{% endblock %}

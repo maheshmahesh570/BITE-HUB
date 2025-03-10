@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card p-4 shadow-lg delivery-card" style="width: 400px;">
+        <h2 class="text-center mb-4">Delivery Details</h2>
+        <form method="post" class="d-grid gap-3">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="address" class="form-label">Address</label>
+                <textarea name="address" id="address" class="form-control" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Proceed to Payment</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

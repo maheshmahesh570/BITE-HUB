@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card text-center p-4 shadow-lg payment-card" style="width: 350px;">
+        <h2 class="mb-4">Payment</h2>
+        <p class="text-muted mb-4">Total Amount: ₹{{ total }}</p>
+
+        <!-- Razorpay Payment Button -->
+        <form action="{% url 'verify_payment' %}" method="post" id="razorpay-form">
+            {% csrf_token %}
+            <script
+                src="https://checkout.razorpay.com/v1/checkout.js"
+                data-key="{{ razorpay_key_id }}"
+                data-amount="{{ total|multiply:100 }}" <!-- Convert total to paise -->
+                data-currency="INR"
+                data-order_id="{{ order.razorpay_order_id }}"
+                data-buttontext="Pay with Razorpay"
+                data-name="Hot Food App"
+                data-description="Order Payment"
+                data-prefill.name="{{ user.username }}"
+                data-prefill.email="{{ user.email }}"
+                data-theme.color="#F37254"
+            ></script>
+            <input type="hidden" name="order_id" value="{{ order.id }}">
+        </form>
+
+        <!-- Hidden Form for Redirection -->
+        <form id="redirect-form" action="{% url 'verify_payment' %}" method="POST" style="display: none;">
+            {% csrf_token %}
+            <input type="hidden" name="razorpay_order_id" value="{{ order.razorpay_order_id }}">
+            <input type="hidden" name="razorpay_payment_id" value="">
+            <input type="hidden" name="razorpay_signature" value="">
+        </form>
+
+        <!-- Additional Information -->
+        <p class="text-muted mt-4">
+            After completing the payment, you will be redirected to the payment success page.
+        </p>
+    </div>
+</div>
+
+<script>
+    // Handle Razorpay success callback
+    document.addEventListener('DOMContentLoaded', function () {
+        const redirectForm = document.getElementById('redirect-form');
+        window.onload = function () {
+            if (window.location.href.includes('success')) {
+                // Extract payment details from the URL or Razorpay response
+                const urlParams = new URLSearchParams(window.location.search);
+                const paymentId = urlParams.get('razorpay_payment_id');
+                const orderId = urlParams.get('razorpay_order_id');
+                const signature = urlParams.get('razorpay_signature');
+
+                // Populate hidden form fields
+                redirectForm.querySelector('input[name="razorpay_payment_id"]').value = paymentId;
+                redirectForm.querySelector('input[name="razorpay_signature"]').value = signature;
+
+                // Submit the form to verify_payment
+                redirectForm.submit();
+            }
+        };
+    });
+</script>
+{% endblock %}

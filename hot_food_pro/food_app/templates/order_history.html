@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Order History</h2>
+    {% if orders %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Date</th>
+                    <th>Total Amount</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>#{{ order.id }}</td>
+                    <td>{{ order.created_at|date:"Y-m-d H:i" }}</td>
+                    <td>${{ order.total_amount }}</td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-info text-center">
+            <i class="fas fa-box-open"></i> You have no orders yet.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
