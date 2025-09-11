@@ -18,9 +18,7 @@ It allows users to browse food items, add them to the cart, make secure payments
 
 🚀 How to Run
 
-1. Clone the repository  
-   ```bash
-   git clone https://github.com/your-username/food-plaza.git
+1. Open  pycharm
 
 2.Navigate to the project folder
 
