@@ -1,6 +1,6 @@
-🍽️ FOOD PLAZA
+🍽️ BITE-HUB
 
-Food Plaza is an online food ordering website developed using Django, Python, HTML, CSS, and Razorpay.  
+BITE-HUB is an online food ordering website developed using Django, Python, HTML, CSS, and Razorpay.  
 It allows users to browse food items, add them to the cart, make secure payments, and track their orders.  
 
 🛠️ Tech Stack
